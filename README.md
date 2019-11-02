@@ -9,4 +9,5 @@
 * matplotlib 2.2.2
 * librosa 0.7.1
 ## Reference
-* Graphic User Interface : https://github.com/jsgonzlez661/PyQt5-and-Matplotlib
+* Graphic User Interface 
+  + https://github.com/jsgonzlez661/PyQt5-and-Matplotlib
