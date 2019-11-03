@@ -1,32 +1,117 @@
-# -*- coding: utf-8 -*-
+'''
 
-# Form implementation generated from reading ui file 'main.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.2
-#
-# WARNING! All changes made in this file will be lost!
+  -*- coding: utf-8 -*-
+
+  library : PyQt5 UI code generator 5.11.2, matplotlib 2.2.2, librosa 0.7.1
+
+  code by Soo-Hwan  :  https://github.com/sh951011/My-Capstone-Application
+  blog : https://blog.naver.com/sooftware
+
+  License : MIT License
+
+'''
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QFileDialog
 import librosa
 import torch
 import numpy as np
 import sounddevice as sd
+from matplotlink import MatplotWidget
 
+# AUDIO  ==
 SAMPLE_RATE = 16000
 N_FFT = 336
 HOP_LENGTH = 84
+# =======================
 
-class Ui_MainWindow(object):
-	def setupUi(self, MainWindow):
+# MAIN WINDOW ==
+MAIN_WINDOW_WIDTH = 750
+MAIN_WINDOE_HEIGHT = 970
+# =======================
+
+# TEAMNAME ==
+TEAMNAME_WIDTH = 250
+TEAMNAME_HEIGHT = 31
+TEAMNAME_COORD_X = 250
+TEAMNAME_COORD_Y = 50
+# =======================
+
+# COMMENT ==
+COMMENT_WIDTH = 500
+COMMENT_HEIGHT = 55
+COMMENT_COORD_X = 215
+COMMENT_COORD_Y = 110
+# =======================
+
+# HEADER ==
+HEADER_WIDTH = 300
+HEADER_HEIGHT = 30
+HEADER1_COORD_X = 100
+HEADER1_COORD_Y = 200
+HEADER2_COORD_X = HEADER1_COORD_X
+HEADER2_COORD_Y = (HEADER1_COORD_Y + 105)
+HEADER3_COORD_X = HEADER1_COORD_X
+HEADER3_COORD_Y = (HEADER1_COORD_Y + 515)
+# ========================
+
+# LINE EDIT ==
+EDIT_WIDTH = 350
+EDIT_HEIGHT = 40
+EDIT1_COORD_X = 100
+EDIT1_COORD_Y = 240
+EDIT2_COORD_X = EDIT1_COORD_X
+EDIT2_COORD_Y = (EDIT1_COORD_Y + 410)
+EDIT3_COORD_X = EDIT1_COORD_X
+EDIT3_COORD_Y = (EDIT1_COORD_Y + 515)
+# ========================
+
+# BUTTON ==
+BTN_WIDTH = 170
+BTN_HEIGHT = EDIT_HEIGHT  # 40
+LOAD_BTN_COORD_X = 470
+LOAD_BTN_COORD_Y = EDIT1_COORD_Y
+PLAY_BTN_COORD_X = LOAD_BTN_COORD_X
+PLAY_BTN_COORD_Y = EDIT2_COORD_Y
+INFER_BTN_COORD_X = LOAD_BTN_COORD_X
+INFER_BTN_COORD_Y = EDIT3_COORD_Y
+INIT_BTN_COORD_X = 285
+INIT_BTN_COORD_Y = 835
+# ========================
+
+# PLOT & FOOTER ==
+PLOT_WIDTH = 550
+PLOT_HEIGHT = 300
+PLOT_COORD_X = EDIT1_COORD_X
+PLOT_COORD_Y = 340
+FOOTER_COORD_X = 215
+FOOTER_COORD_Y = 890
+FOOTER_WIDTH = 600
+FOOTER_HEIGHT = 70
+# ======================
+
+# FONT ==
+MARGUN_FONT = "맑은 고딕"
+NANUM_BOLD_FONT = "나눔스퀘어 ExtraBold"
+HEADER_FONT_SIZE = 16
+TEAMNAME_FONT_SIZE = 24
+COMMENT_FONT_SIZE = 10
+INIT_FONT_SIZE = 14
+FOOTER_FONT_SIZE = 9
+# ======================
+
+class Prototype(object):
+	def setup(self, main_window):
+		# Basic Setting ==
 		app = QtWidgets.QApplication(sys.argv)
-		MainWindow.setObjectName("MainWindow")
-		MainWindow.resize(541, 553)
-		MainWindow.setWindowIcon(QIcon('icon2.png'))
-		MainWindow.setMinimumSize(QtCore.QSize(541, 553))
-		MainWindow.setMaximumSize(QtCore.QSize(541, 553))
-		MainWindow.setStyleSheet("QLabel{\n"
+		main_window.setObjectName("MainWindow")
+		main_window.resize(MAIN_WINDOW_WIDTH, MAIN_WINDOE_HEIGHT)
+		main_window.setWindowIcon(QIcon('icon2.png'))
+		main_window.setMinimumSize(QtCore.QSize(MAIN_WINDOW_WIDTH, MAIN_WINDOE_HEIGHT))
+		main_window.setMaximumSize(QtCore.QSize(MAIN_WINDOW_WIDTH, MAIN_WINDOE_HEIGHT))
+		# Copied from https://github.com/jsgonzlez661/PyQt5-and-Matplotlib/main.py ==
+		main_window.setStyleSheet("QLabel{\n"
 		"/*color: white;*/\n"
 		"}\n"
 		"QPushButton{\n"
@@ -46,88 +131,158 @@ class Ui_MainWindow(object):
 		"\n"
 		"\n"
 		"")
-		self.centralwidget = QtWidgets.QWidget(MainWindow)
+		# ================================================
+		self.centralwidget = QtWidgets.QWidget(main_window)
 		self.centralwidget.setObjectName("centralwidget")
+		# ============================
+
+		# Team Name ===
+
 		self.teamname_label = QtWidgets.QLabel(self.centralwidget)
-		self.teamname_label.setGeometry(QtCore.QRect(190, 0, 211, 31))
-		font = QtGui.QFont("Arial")
-		font.setPointSize(12)
+		self.teamname_label.setGeometry(QtCore.QRect(TEAMNAME_COORD_X, TEAMNAME_COORD_Y, TEAMNAME_WIDTH, TEAMNAME_HEIGHT))
+		font = QtGui.QFont(NANUM_BOLD_FONT)
+		font.setPointSize(TEAMNAME_FONT_SIZE)
 		self.teamname_label.setFont(font)
 		self.teamname_label.setObjectName("teamname_label")
-		self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-		self.lineEdit.setGeometry(QtCore.QRect(10, 60, 371, 31))
-		self.lineEdit.setObjectName("lineEdit")
-		self.load_btn1 = QtWidgets.QPushButton(self.centralwidget)
-		self.load_btn1.setGeometry(QtCore.QRect(390, 60, 141, 31))
-		self.load_btn1.setObjectName("load_btn1")
-		self.play_btn = QtWidgets.QPushButton(self.centralwidget)
-		self.play_btn.setGeometry(QtCore.QRect(205, 510, 141, 31))
-		self.play_btn.setObjectName("load_btn1")
-		self.audio_label = QtWidgets.QLabel(self.centralwidget)
-		self.audio_label.setGeometry(QtCore.QRect(100, 40, 171, 16))
-		self.infer_label = QtWidgets.QLabel(self.centralwidget)
-		self.infer_label.setGeometry(QtCore.QRect(120, 160, 171, 16))
-		font = QtGui.QFont('SansSerif')
-		font.setPointSize(10)
-		self.audio_label.setFont(font)
-		self.audio_label.setObjectName("audio_label")
-		self.infer_label.setFont(font)
-		self.infer_label.setObjectName("infer_label")
-		self.load_btn2 = QtWidgets.QPushButton(self.centralwidget)
-		self.load_btn2.setGeometry(QtCore.QRect(390, 120, 141, 31))
-		self.load_btn2.setObjectName("load_btn2")
-		self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
-		self.lineEdit_2.setGeometry(QtCore.QRect(10, 120, 371, 31))
-		self.lineEdit_2.setObjectName("lineEdit_2")
-		self.gt_label = QtWidgets.QLabel(self.centralwidget)
-		self.gt_label.setGeometry(QtCore.QRect(90, 100, 221, 16))
-		font = QtGui.QFont('SansSerif')
-		font.setPointSize(10)
-		self.gt_label.setFont(font)
-		self.gt_label.setObjectName("gt_label")
-		self.MplWidget = MplWidget(self.centralwidget)
-		self.MplWidget.setGeometry(QtCore.QRect(10, 210, 520, 300))
-		self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
-		self.lineEdit_3.setGeometry(QtCore.QRect(10, 180, 371, 31))
-		self.lineEdit_3.setObjectName("lineEdit_3")
-		self.infer_btn = QtWidgets.QPushButton(self.centralwidget)
-		self.infer_btn.setGeometry(QtCore.QRect(390, 180, 141, 31))
-		self.infer_btn.setObjectName("infer_btn")
-		MainWindow.setCentralWidget(self.centralwidget)
-		self.load_btn1.clicked.connect(self.open_wav)
-		self.load_btn2.clicked.connect(self.open_txt)
-		self.play_btn.clicked.connect(self.play_audio)
-		self.retranslateUi(MainWindow)
-		QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-	def retranslateUi(self, MainWindow):
-		_translate = QtCore.QCoreApplication.translate
-		MainWindow.setWindowTitle(_translate("MainWindow", "Korean Speech Recognition"))
-		self.teamname_label.setText(_translate("MainWindow", "    Team Kai.Lib"))
-		self.load_btn1.setText(_translate("MainWindow", "Load"))
-		self.audio_label.setText(_translate("MainWindow", "Upload audio file (wav)"))
-		self.infer_label.setText(_translate("MainWindow", "Infer by Model"))
-		self.load_btn2.setText(_translate("MainWindow", "Load"))
-		self.play_btn.setText(_translate("MainWindow", " ▶ "))
-		self.gt_label.setText(_translate("MainWindow", "    Ground Truth (txt)"))
-		self.infer_btn.setText(_translate("MainWindow", "Infer"))
-		#self.infer_btn.clicked.connect(self.update_graph)
+		# =============================
+
+		# Comment ==
+
+		self.comment = QtWidgets.QLabel(self.centralwidget)
+		self.comment.setGeometry(QtCore.QRect(COMMENT_COORD_X, COMMENT_COORD_Y, COMMENT_WIDTH, COMMENT_HEIGHT))
+		font = QtGui.QFont(MARGUN_FONT)
+		font.setPointSize(COMMENT_FONT_SIZE)
+		self.comment.setFont(font)
+		self.comment.setObjectName("comment")
+
+		# =============================
+
+
+
+		# 1. 음성파일 업로드 (Header1) ==
+
+		self.header1 = QtWidgets.QLabel(self.centralwidget)
+		self.header1.setGeometry(QtCore.QRect(HEADER1_COORD_X, HEADER1_COORD_Y, HEADER_WIDTH, HEADER_HEIGHT))
+		font = QtGui.QFont(NANUM_BOLD_FONT)
+		font.setPointSize(HEADER_FONT_SIZE)
+		self.header1.setFont(font)
+		self.header1.setObjectName("header1")
+		self.edit1 = QtWidgets.QLineEdit(self.centralwidget)
+		self.edit1.setGeometry(QtCore.QRect(EDIT1_COORD_X,  EDIT1_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
+		self.edit1.setObjectName("edit1")
+		self.load_btn = QtWidgets.QPushButton(self.centralwidget)
+		self.load_btn.setGeometry(QtCore.QRect(LOAD_BTN_COORD_X, LOAD_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
+		self.load_btn.setObjectName("load_btn1")
+
+		# =============================
+
+		# 2. 음성파일 확인 (Header2) ==
+
+		self.header2 = QtWidgets.QLabel(self.centralwidget)
+		self.header2.setGeometry(QtCore.QRect(HEADER2_COORD_X, HEADER2_COORD_Y, HEADER_WIDTH, HEADER_HEIGHT))
+		font = QtGui.QFont(NANUM_BOLD_FONT)
+		font.setPointSize(HEADER_FONT_SIZE)
+		self.header2.setFont(font)
+		self.header2.setObjectName("header2")
+		self.matplot = MatplotWidget(self.centralwidget)
+		self.matplot.setGeometry(QtCore.QRect(PLOT_COORD_X, PLOT_COORD_Y, PLOT_WIDTH, PLOT_HEIGHT))
+		self.edit2 = QtWidgets.QLineEdit(self.centralwidget)
+		self.edit2.setGeometry(QtCore.QRect(EDIT2_COORD_X, EDIT2_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
+		self.edit2.setObjectName("edit2")
+		self.play_btn = QtWidgets.QPushButton(self.centralwidget)
+		self.play_btn.setGeometry(QtCore.QRect(PLAY_BTN_COORD_X, PLAY_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
+		self.play_btn.setObjectName("play_btn")
+
+		# =======================
+
+		# 3. Kai 모델 인식 결과 (Header3) ==
+
+		self.header3 = QtWidgets.QLabel(self.centralwidget)
+		self.header3.setGeometry(QtCore.QRect(HEADER3_COORD_X, HEADER3_COORD_Y, HEADER_WIDTH, HEADER_HEIGHT))
+		font = QtGui.QFont(NANUM_BOLD_FONT)
+		font.setPointSize(HEADER_FONT_SIZE)
+		self.header3.setFont(font)
+		self.header3.setObjectName("header3")
+		self.edit3 = QtWidgets.QLineEdit(self.centralwidget)
+		self.edit3.setGeometry(QtCore.QRect(EDIT3_COORD_X, EDIT3_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
+		self.edit3.setObjectName("edit3")
+		self.infer_btn = QtWidgets.QPushButton(self.centralwidget)
+		self.infer_btn.setGeometry(QtCore.QRect(INFER_BTN_COORD_X, INFER_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
+		self.infer_btn.setObjectName("infer_btn")
+
+		# =======================
+
+		# 다시하기 버튼 ===
+
+		self.init_btn = QtWidgets.QPushButton(self.centralwidget)
+		self.init_btn.setGeometry(QtCore.QRect(INIT_BTN_COORD_X, INIT_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
+		self.init_btn.setObjectName("init_btn")
+		font = QtGui.QFont(NANUM_BOLD_FONT)
+		font.setPointSize(INIT_FONT_SIZE)
+		self.init_btn.setFont(font)
+
+		# =======================
+
+		# 꼬리말 ===
+
+		self.footer = QtWidgets.QLabel(self.centralwidget)
+		self.footer.setGeometry(QtCore.QRect(FOOTER_COORD_X, FOOTER_COORD_Y, FOOTER_WIDTH, FOOTER_HEIGHT))
+		font = QtGui.QFont(MARGUN_FONT)
+		font.setPointSize(FOOTER_FONT_SIZE)
+		self.footer.setFont(font)
+		self.footer.setObjectName("footer")
+
+		# =======================
+
+		# Link Button to Func ==
+
+		main_window.setCentralWidget(self.centralwidget)
+		self.load_btn.clicked.connect(self.open_wav)
+		#self.play_btn.clicked.connect(self.open_txt)
+		self.play_btn.clicked.connect(self.play_audio)
+
+		# =======================
+
+		def set_text(obj, main_window):
+			translate = QtCore.QCoreApplication.translate
+			main_window.setWindowTitle(translate("MainWindow", "Korean Speech Recognition"))
+			obj.teamname_label.setText(translate("MainWindow", "Team Kai.Lib"))
+			obj.comment.setText(translate("MainWindow", "    음성파일을 업로드하여 인식결과를\n확인할 수 있는 시연용 프로토타입입니다."))
+			obj.header1.setText(translate("MainWindow", "1. 음성파일 업로드"))
+			obj.load_btn.setText(translate("MainWindow", "▦  Load"))
+			obj.header2.setText(translate("MainWindow", "2. 음성파일 확인"))
+			obj.play_btn.setText(translate("MainWindow", "▶  Play"))
+			obj.header3.setText(translate("MainWindow", "3. Kai 모델 인식 결과"))
+			obj.infer_btn.setText(translate("MainWindow", "\u2714  Infer"))
+			obj.init_btn.setText(translate("MainWindow", "\u21bb"))
+			obj.footer.setText(translate("MainWindow", "Team  Kai.Lib  Capstone  Project  of  2019\n         Advisor - Prof SuWon-Park"))
+		set_text(self, main_window)
+		QtCore.QMetaObject.connectSlotsByName(main_window)
+
 
 	def open_wav(self):
 		audio = QFileDialog.getOpenFileName(None, 'Audio File', "", "WAV File (*.wav)")
-		self.lineEdit.setText(audio[0].split('/')[-1])
+		self.edit1.setText(audio[0])
 
 		def update_graph(obj):
-			audio_path = obj.lineEdit.text()
+			audio_path = obj.edit1.text()
 			sig, sr = librosa.core.load(audio_path, sr=SAMPLE_RATE)
-			self.MplWidget.canvas.axes.clear()
-			self.MplWidget.canvas.axes.plot(sig, color = 'skyblue')
-			self.MplWidget.canvas.axes.legend(["Signal"], loc='upper right')
-			self.MplWidget.canvas.axes.set_title("Audio Signal")
-			self.MplWidget.canvas.axes.set_ylabel("Amplitude")
-			self.MplWidget.canvas.axes.grid(linewidth=0.2)
-			self.MplWidget.canvas.draw()
+			# remove silence ==
+			non_silence_indices = librosa.effects.split(sig, top_db=30)
+			sig = np.concatenate([sig[start:end] for start, end in non_silence_indices])
+			# ======================
 
+			# draw ==
+			self.matplot.canvas.axes.clear()
+			self.matplot.canvas.axes.plot(sig, color = 'skyblue')
+			#self.matplot.canvas.axes.legend(["Signal"], loc='upper right')
+			self.matplot.canvas.axes.set_title("Audio Signal")
+			self.matplot.canvas.axes.set_xlabel("time")
+			self.matplot.canvas.axes.set_ylabel("Amplitude")
+			self.matplot.canvas.axes.grid(linewidth=0.2)
+			self.matplot.canvas.draw()
+			# =======================
 		update_graph(self)
 
 	def open_txt(self):
@@ -135,10 +290,10 @@ class Ui_MainWindow(object):
 		f = open(text[0], "r")
 		contents = f.read()
 		f.close()
-		self.lineEdit_2.setText(contents)
+		self.edit2.setText(contents)
 
 	def play_audio(self):
-		audio_path = self.lineEdit.text()
+		audio_path = self.edit1.text()
 		sig, sr = librosa.core.load(audio_path, sr=SAMPLE_RATE)
 		sd.play(sig, 16000)
 
@@ -152,13 +307,10 @@ class Ui_MainWindow(object):
 
 		return torch.FloatTensor(mfccs).transpose(0, 1)
 
-from mplwidget import MplWidget
-
-
 import sys
 app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(MainWindow)
-MainWindow.show()
+main_window = QtWidgets.QMainWindow()
+ui = Prototype()
+ui.setup(main_window)
+main_window.show()
 sys.exit(app.exec_())
