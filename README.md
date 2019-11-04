@@ -1,7 +1,6 @@
 # My-Capstone-Application
- Application to Sount-To-Text  
-
- ![result](https://postfiles.pstatic.net/MjAxOTExMDJfNzcg/MDAxNTcyNjY3NjgwNzY0.Gr8oknLjkZoumtgEx1myQOTU6ozJbVKUrQ5-1m2bcJMg.NTt1UIcb_XQ3c9sNLN7BWN_s7pgo_0ZNlR-_vu3yr7wg.PNG.sooftware/image.png?type=w773)
+ Application to Sount-To-Text (My Capstone Project Prototype)  
+ ![result](https://postfiles.pstatic.net/MjAxOTExMDRfMTI5/MDAxNTcyODAzNDk4ODY1.tdd-kb8JH-EfB9Qa6ORsHs1jXEJ9mIchvubG9Yq-7vsg.nalckWjo5vlINdGWmhhuQdVAr6uI0LuQs8mzTIlGZewg.PNG.sooftware/%EC%8B%9C%EC%97%B02.PNG?type=w773)
  * Infer part is not implement at present
 ## Requirement  
 * Python 3.6.5
@@ -9,5 +8,10 @@
 * matplotlib 2.2.2
 * librosa 0.7.1
 ## Reference
-* Graphic User Interface 
-  + https://github.com/jsgonzlez661/PyQt5-and-Matplotlib
+* Korean ASR Model 
+  + https://github.com/sh951011/Naver-Hackathon-2019-Speech-Team_Kai.Lib  
+## License
+```
+Qt by The Qt Company
+https://www.qt.io/
+```
