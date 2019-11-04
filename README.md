@@ -9,4 +9,9 @@
 * librosa 0.7.1
 ## Reference
 * Korean ASR Model 
-  + https://github.com/sh951011/Naver-Hackathon-2019-Speech-Team_Kai.Lib
+  + https://github.com/sh951011/Naver-Hackathon-2019-Speech-Team_Kai.Lib  
+## License
+```
+Qt by The Qt Company
+https://www.qt.io/
+```
