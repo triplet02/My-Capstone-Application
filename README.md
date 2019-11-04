@@ -1,6 +1,6 @@
 # My-Capstone-Application
  Application to Sount-To-Text (My Capstone Project Prototype)  
- ![result](https://postfiles.pstatic.net/MjAxOTExMDRfMTI5/MDAxNTcyODAzNDk4ODY1.tdd-kb8JH-EfB9Qa6ORsHs1jXEJ9mIchvubG9Yq-7vsg.nalckWjo5vlINdGWmhhuQdVAr6uI0LuQs8mzTIlGZewg.PNG.sooftware/%EC%8B%9C%EC%97%B02.PNG?type=w773)
+ ![result](https://postfiles.pstatic.net/MjAxOTExMDRfMjMx/MDAxNTcyODAzMTc4MzY1.Mu6f6dCHOhNVUeyLv5N6JgkUgE5as4fMhdgbvpmw8xMg.x0AG-fjo6g9eK6HXTB9iBhEYbpQtK-us9EjeV2wopqkg.PNG.sooftware/%EC%8B%9C%EC%97%B0.PNG?type=w773)
  * Infer part is not implement at present
 ## Requirement  
 * Python 3.6.5
