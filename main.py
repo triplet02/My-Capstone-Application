@@ -118,7 +118,6 @@ class Prototype(object):
 		main_window.setWindowIcon(QIcon('icon2.png'))
 		main_window.setMinimumSize(QtCore.QSize(MAIN_WINDOW_WIDTH, MAIN_WINDOE_HEIGHT))
 		main_window.setMaximumSize(QtCore.QSize(MAIN_WINDOW_WIDTH, MAIN_WINDOE_HEIGHT))
-		# Copied from https://github.com/jsgonzlez661/PyQt5-and-Matplotlib/main.py ==
 		main_window.setStyleSheet("QLabel{\n"
 		"/*color: white;*/\n"
 		"}\n"
@@ -139,7 +138,6 @@ class Prototype(object):
 		"\n"
 		"\n"
 		"")
-		# ================================================
 		self.centralwidget = QtWidgets.QWidget(main_window)
 		self.centralwidget.setObjectName("centralwidget")
 		# ============================
@@ -313,18 +311,21 @@ class Prototype(object):
 			contents = f.read()
 			f.close()
 			obj.edit2.setText(contents)
+			self.edit2.setStyleSheet("color: black;")
 
 		def play_audio(obj):
 			sig, sr = librosa.core.load(obj.audio_path, sr=SAMPLE_RATE)
 			sd.play(sig, SAMPLE_RATE)
-
-		open_txt(self)
-		play_audio(self)
+		if self.audio_path != None:
+			open_txt(self)
+			play_audio(self)
 
 	def initiate(self):
 		self.edit1.setText(EDIT1_DEFAULT)
 		self.edit2.setText(EDIT2_DEFAULT)
+		self.edit2.setStyleSheet("color: gray;")
 		self.edit3.setText(EDIT3_DEFAULT)
+		self.edit3.setStyleSheet("color: gray;")
 		self.matplot.canvas.axes.clear()
 		self.matplot.canvas.draw()
 		self.audio_path = None
