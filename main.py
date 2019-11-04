@@ -41,7 +41,7 @@ TEAMNAME_COORD_Y = 50
 # COMMENT ==
 COMMENT_WIDTH = 500
 COMMENT_HEIGHT = 55
-COMMENT_COORD_X = 215
+COMMENT_COORD_X = 120
 COMMENT_COORD_Y = 110
 # =======================
 
@@ -65,6 +65,9 @@ EDIT2_COORD_X = EDIT1_COORD_X
 EDIT2_COORD_Y = (EDIT1_COORD_Y + 410)
 EDIT3_COORD_X = EDIT1_COORD_X
 EDIT3_COORD_Y = (EDIT1_COORD_Y + 515)
+EDIT1_DEFAULT = "Please upload audio file"
+EDIT2_DEFAULT = "Please press Play button"
+EDIT3_DEFAULT = "Infer retult by Kai Model"
 # ========================
 
 # BUTTON ==
@@ -85,7 +88,7 @@ PLOT_WIDTH = 550
 PLOT_HEIGHT = 300
 PLOT_COORD_X = EDIT1_COORD_X
 PLOT_COORD_Y = 340
-FOOTER_COORD_X = 215
+FOOTER_COORD_X = 65
 FOOTER_COORD_Y = 890
 FOOTER_WIDTH = 600
 FOOTER_HEIGHT = 70
@@ -102,6 +105,11 @@ FOOTER_FONT_SIZE = 9
 # ======================
 
 class Prototype(object):
+	def __init__(self):
+		self.audio_path = None
+		self.gt_path = None
+		self.main_window = None
+
 	def setup(self, main_window):
 		# Basic Setting ==
 		app = QtWidgets.QApplication(sys.argv)
@@ -144,6 +152,7 @@ class Prototype(object):
 		font.setPointSize(TEAMNAME_FONT_SIZE)
 		self.teamname_label.setFont(font)
 		self.teamname_label.setObjectName("teamname_label")
+		self.teamname_label.setAlignment(QtCore.Qt.AlignCenter)
 
 		# =============================
 
@@ -155,6 +164,7 @@ class Prototype(object):
 		font.setPointSize(COMMENT_FONT_SIZE)
 		self.comment.setFont(font)
 		self.comment.setObjectName("comment")
+		self.comment.setAlignment(QtCore.Qt.AlignCenter)
 
 		# =============================
 
@@ -171,6 +181,9 @@ class Prototype(object):
 		self.edit1 = QtWidgets.QLineEdit(self.centralwidget)
 		self.edit1.setGeometry(QtCore.QRect(EDIT1_COORD_X,  EDIT1_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
 		self.edit1.setObjectName("edit1")
+		self.edit1.setText(EDIT1_DEFAULT)
+		self.edit1.setStyleSheet("color: gray;")
+		self.edit1.setAlignment(QtCore.Qt.AlignCenter)
 		self.load_btn = QtWidgets.QPushButton(self.centralwidget)
 		self.load_btn.setGeometry(QtCore.QRect(LOAD_BTN_COORD_X, LOAD_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
 		self.load_btn.setObjectName("load_btn1")
@@ -190,6 +203,9 @@ class Prototype(object):
 		self.edit2 = QtWidgets.QLineEdit(self.centralwidget)
 		self.edit2.setGeometry(QtCore.QRect(EDIT2_COORD_X, EDIT2_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
 		self.edit2.setObjectName("edit2")
+		self.edit2.setText(EDIT2_DEFAULT)
+		self.edit2.setStyleSheet("color: gray;")
+		self.edit2.setAlignment(QtCore.Qt.AlignCenter)
 		self.play_btn = QtWidgets.QPushButton(self.centralwidget)
 		self.play_btn.setGeometry(QtCore.QRect(PLAY_BTN_COORD_X, PLAY_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
 		self.play_btn.setObjectName("play_btn")
@@ -207,6 +223,9 @@ class Prototype(object):
 		self.edit3 = QtWidgets.QLineEdit(self.centralwidget)
 		self.edit3.setGeometry(QtCore.QRect(EDIT3_COORD_X, EDIT3_COORD_Y, EDIT_WIDTH, EDIT_HEIGHT))
 		self.edit3.setObjectName("edit3")
+		self.edit3.setText(EDIT3_DEFAULT)
+		self.edit3.setStyleSheet("color: gray;")
+		self.edit3.setAlignment(QtCore.Qt.AlignCenter)
 		self.infer_btn = QtWidgets.QPushButton(self.centralwidget)
 		self.infer_btn.setGeometry(QtCore.QRect(INFER_BTN_COORD_X, INFER_BTN_COORD_Y, BTN_WIDTH, BTN_HEIGHT))
 		self.infer_btn.setObjectName("infer_btn")
@@ -232,6 +251,8 @@ class Prototype(object):
 		font.setPointSize(FOOTER_FONT_SIZE)
 		self.footer.setFont(font)
 		self.footer.setObjectName("footer")
+		self.footer.setStyleSheet("color: gray;")
+		self.footer.setAlignment(QtCore.Qt.AlignCenter)
 
 		# =======================
 
@@ -239,8 +260,8 @@ class Prototype(object):
 
 		main_window.setCentralWidget(self.centralwidget)
 		self.load_btn.clicked.connect(self.open_wav)
-		#self.play_btn.clicked.connect(self.open_txt)
-		self.play_btn.clicked.connect(self.play_audio)
+		self.play_btn.clicked.connect(self.play)
+		self.init_btn.clicked.connect(self.initiate)
 
 		# =======================
 
@@ -248,7 +269,7 @@ class Prototype(object):
 			translate = QtCore.QCoreApplication.translate
 			main_window.setWindowTitle(translate("MainWindow", "Korean Speech Recognition"))
 			obj.teamname_label.setText(translate("MainWindow", "Team Kai.Lib"))
-			obj.comment.setText(translate("MainWindow", "    음성파일을 업로드하여 인식결과를\n확인할 수 있는 시연용 프로토타입입니다."))
+			obj.comment.setText(translate("MainWindow", "음성파일을 업로드하여 인식결과를\n확인할 수 있는 시연용 프로토타입입니다."))
 			obj.header1.setText(translate("MainWindow", "1. 음성파일 업로드"))
 			obj.load_btn.setText(translate("MainWindow", "▦  Load"))
 			obj.header2.setText(translate("MainWindow", "2. 음성파일 확인"))
@@ -256,7 +277,7 @@ class Prototype(object):
 			obj.header3.setText(translate("MainWindow", "3. Kai 모델 인식 결과"))
 			obj.infer_btn.setText(translate("MainWindow", "\u2714  Infer"))
 			obj.init_btn.setText(translate("MainWindow", "\u21bb"))
-			obj.footer.setText(translate("MainWindow", "Team  Kai.Lib  Capstone  Project  of  2019\n         Advisor - Prof SuWon-Park"))
+			obj.footer.setText(translate("MainWindow", "Team  Kai.Lib  Capstone  Project  of  2019\nAdvisor - Prof SuWon-Park"))
 		set_text(self, main_window)
 		QtCore.QMetaObject.connectSlotsByName(main_window)
 
@@ -264,38 +285,50 @@ class Prototype(object):
 	def open_wav(self):
 		audio = QFileDialog.getOpenFileName(None, 'Audio File', "", "WAV File (*.wav)")
 		self.edit1.setText(audio[0])
+		self.audio_path = self.edit1.text()
+		self.gt_path = self.audio_path.split('/')[-1].split('.')[0] + ".txt"
 
 		def update_graph(obj):
-			audio_path = obj.edit1.text()
-			sig, sr = librosa.core.load(audio_path, sr=SAMPLE_RATE)
+			sig, sr = librosa.core.load(obj.audio_path, sr=SAMPLE_RATE)
 			# remove silence ==
 			non_silence_indices = librosa.effects.split(sig, top_db=30)
 			sig = np.concatenate([sig[start:end] for start, end in non_silence_indices])
 			# ======================
 
 			# draw ==
-			self.matplot.canvas.axes.clear()
-			self.matplot.canvas.axes.plot(sig, color = 'skyblue')
-			#self.matplot.canvas.axes.legend(["Signal"], loc='upper right')
-			self.matplot.canvas.axes.set_title("Audio Signal")
-			self.matplot.canvas.axes.set_xlabel("time")
-			self.matplot.canvas.axes.set_ylabel("Amplitude")
-			self.matplot.canvas.axes.grid(linewidth=0.2)
-			self.matplot.canvas.draw()
+			obj.matplot.canvas.axes.clear()
+			obj.matplot.canvas.axes.plot(sig, color = 'skyblue')
+			obj.matplot.canvas.axes.set_title("Audio Signal")
+			obj.matplot.canvas.axes.set_xlabel("time")
+			obj.matplot.canvas.axes.set_ylabel("Amplitude")
+			obj.matplot.canvas.axes.grid(linewidth=0.2)
+			obj.matplot.canvas.draw()
 			# =======================
 		update_graph(self)
 
-	def open_txt(self):
-		text = QFileDialog.getOpenFileName(None, 'Text File', "", "TXT File (*.txt)")
-		f = open(text[0], "r")
-		contents = f.read()
-		f.close()
-		self.edit2.setText(contents)
+	def play(self):
+		def open_txt(obj):
+			#text = QFileDialog.getOpenFileName(None, 'Text File', "", "TXT File (*.txt)")
+			f = open(obj.gt_path, "r")
+			contents = f.read()
+			f.close()
+			obj.edit2.setText(contents)
 
-	def play_audio(self):
-		audio_path = self.edit1.text()
-		sig, sr = librosa.core.load(audio_path, sr=SAMPLE_RATE)
-		sd.play(sig, 16000)
+		def play_audio(obj):
+			sig, sr = librosa.core.load(obj.audio_path, sr=SAMPLE_RATE)
+			sd.play(sig, SAMPLE_RATE)
+
+		open_txt(self)
+		play_audio(self)
+
+	def initiate(self):
+		self.edit1.setText(EDIT1_DEFAULT)
+		self.edit2.setText(EDIT2_DEFAULT)
+		self.edit3.setText(EDIT3_DEFAULT)
+		self.matplot.canvas.axes.clear()
+		self.matplot.canvas.draw()
+		self.audio_path = None
+		self.gt_path = None
 
 	def get_librosa_mfcc(filepath, n_mfcc=40, rm_silence=True):
 		sig, sr = librosa.core.load(filepath, SAMPLE_RATE)
